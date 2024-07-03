@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddb91e8e8fba41641ab76b761dbea085, type: 3}
+  m_Name: Car 10
+  m_EditorClassIdentifier: 
+  Id: 9
+  Icon: {fileID: 21300000, guid: cf2197ac2ad6caa42881c668f4a87b37, type: 3}
+  Car: {fileID: 7475136354032429387, guid: 11d0e625aa73ad94aaab32ef446afe1a, type: 3}
+  Price: 300
