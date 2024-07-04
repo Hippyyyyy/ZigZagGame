@@ -1,3 +1,4 @@
+using SCN.Common;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,11 +8,33 @@ public class Platform : MonoBehaviour
     [SerializeField] Material mat;
     [SerializeField] List<Color> listColor;
     [SerializeField] Diamond diamondPrefab;
+    BoxCollider boxCol;
+    ObjectPool platformPool;
+    bool isFall;
+    public BoxCollider BoxCol { get => boxCol; set => boxCol = value; }
+
+    private void Awake()
+    {
+        BoxCol = GetComponent<BoxCollider>();
+    }
+
     private void Start()
     {
-        SpawnDiamond();
         /*mat = GetComponent<Material>();
         ChangeColor();*/
+    }
+
+    private void OnEnable()
+    {
+        isFall = false;
+        SpawnDiamond();
+    }
+
+    public void SetUp()
+    {
+        isFall = false;
+        BoxCol.enabled = true;
+        GetComponent<Rigidbody>().isKinematic = true;
     }
 
     void ChangeColor()
@@ -24,6 +47,7 @@ public class Platform : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
+            isFall = true;
             Fall();
             Invoke("Fall", 0.2f);
         }
@@ -31,8 +55,10 @@ public class Platform : MonoBehaviour
 
     void Fall()
     {
+        if (!isFall) return;
+
         GetComponent<Rigidbody>().isKinematic = false;
-        Destroy(gameObject, 1f);
+        Invoke("RemoveObj", 1f);
     }
 
     void SpawnDiamond()
@@ -46,5 +72,21 @@ public class Platform : MonoBehaviour
             diamond.transform.SetParent(transform);
             diamond.transform.rotation = Quaternion.Euler(-90,0,0);
         }
+    }
+    public void SetPool(ObjectPool pool)
+    {
+        this.platformPool = pool;
+    }
+    public void RemoveObj()
+    {
+        if (!isFall) return;
+
+        BoxCol.enabled = false;
+        gameObject.SetActive(false);
+        if (platformPool != null)
+        {
+            platformPool.RemoveObj(gameObject);
+        }
+       
     }
 }

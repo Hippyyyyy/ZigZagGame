@@ -1,3 +1,4 @@
+﻿using SCN.Common;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,8 +10,16 @@ public class PlatformSpawner : MonoBehaviour
     Vector3 lastPosition;
     Vector3 newPos;
     bool isStop;
+    ObjectPool platformPool;
+
+    private void OnEnable()
+    {
+        
+    }
+
     private void Start()
     {
+        platformPool = new ObjectPool(platformPrefab.gameObject, transform);
         lastPosition = lastPlatform.position;
         StartCoroutine(SpawnPlatformCoroutine());
     }
@@ -24,14 +33,19 @@ public class PlatformSpawner : MonoBehaviour
         while (!isStop)
         {
             SpawnPlatform();
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.25f);
         }
     }
 
     void SpawnPlatform()
     {
         GeneratePosition();
-        Instantiate(platformPrefab, newPos, Quaternion.identity);
+        GameObject platformObj = platformPool.GetObjInPool();
+        platformObj.gameObject.SetActive(true);
+        platformObj.GetComponent<Platform>().SetUp();
+        platformObj.GetComponent<Platform>().SetPool(platformPool);
+        platformObj.transform.position = newPos;
+        Debug.Log("Platform spawned at: " + newPos);
         lastPosition = newPos;
     }
 
@@ -49,7 +63,7 @@ public class PlatformSpawner : MonoBehaviour
         {
             newPos.z += 2f;
         }
-
+        newPos.y = 0;
         //newPos.z += 3f;
     }
 }
