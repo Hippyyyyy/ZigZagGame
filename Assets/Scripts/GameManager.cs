@@ -121,21 +121,10 @@ public class GameManager : MonoBehaviour
             var ui = uIBases[i];
             ui.ExitState();
         }
-        if (state == UIState.Menu)
+        int stateIndex = (int)state;
+        if (stateIndex >= 0 && stateIndex < uIBases.Count)
         {
-            uIBases[0].EnterState();
-        }
-        else if (state == UIState.GamePlay)
-        {
-            uIBases[1].EnterState();
-        }
-        else if (state == UIState.GameOver)
-        {
-            uIBases[2].EnterState();
-        }
-        else if (state == UIState.Shop)
-        {
-            uIBases[3].EnterState();
+            uIBases[stateIndex].EnterState();
         }
     }
 
